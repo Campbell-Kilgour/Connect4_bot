@@ -10,6 +10,7 @@ void addMove(int playerInput, int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, 
 int checkFall(int *colm);
 int playerTurn();
 bool checkWin(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7);
+void printMatrix(int matrix[][num_colm], int rows);
 
 int main() {
 
@@ -30,7 +31,20 @@ int main() {
     int *cl6 = column6;
     int *cl7 = column7;
 
-    bool win =  false;
+    //TODO: Make into 2D array for easy of use in checkWin function
+
+    //Declares board array with all 0s
+    int board[num_rows][num_colm];
+
+    for(int row = 0; row < num_rows; row++){
+        for(int elem = 0; elem < num_colm; elem++){
+            board[row][elem] = 0;
+        }
+    }
+
+    printMatrix(board, num_rows);
+
+    /*bool win =  false;
 
     while(!win){
         bool player_turn = true;
@@ -49,13 +63,23 @@ int main() {
 
         win = checkWin(cl1, cl2, cl3, cl4, cl5 ,cl6, cl7);
     }
+*/
+    //printBoard(cl1, cl2, cl3, cl4, cl5, cl6, cl7);
 
-    printBoard(cl1, cl2, cl3, cl4, cl5, cl6, cl7);
-
-    std::cout << playerTurn();
+    //std::cout << playerTurn();
 
     return 0;
 }
+
+void printMatrix(int matrix[][num_colm], int rows){
+    for(int col = 0; col < num_colm; col++){
+        for(int row = 0; row < rows; row++){
+            std::cout << matrix[row][col] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
 
 //prints the Connect4 Board
 void printBoard(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7){
@@ -127,7 +151,7 @@ int checkFall(int *colm){
     bool flag = true;
     int i = 6;
     while(i >= 0 && flag){
-        if((colm[i] != 1 && colm[i] != 2) && colm[i] == 0){
+        if(colm[i] != 1 && colm[i] != 2 && colm[i] == 0){
             pos = i;
             flag = false;
         }else{
@@ -144,5 +168,16 @@ bool checkWin(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *c
 
     //TODO: Add win condition check
 
+    /*
+     *  {0,0,0
+     *   0,A,0  Shape of array relative to the element in question (A)
+     *   0,0,0}
+     */
+    int adjacent[8] = {0,0,0,0,0,0,0,0};
+
+
+
+
     return win;
 }
+
