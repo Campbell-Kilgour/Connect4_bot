@@ -1,0 +1,3 @@
+C:/Users/Campbell Kilgour/CLionProjects/Connect4_bot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Campbell Kilgour/CLionProjects/Connect4_bot/cmake-build-debug/CMakeFiles/Connect4_bot.dir
+C:/Users/Campbell Kilgour/CLionProjects/Connect4_bot/cmake-build-debug/CMakeFiles/edit_cache.dir
