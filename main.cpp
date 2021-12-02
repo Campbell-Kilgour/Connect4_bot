@@ -5,137 +5,121 @@ const int num_rows = 6;
 const int num_colm = 7;
 
 //declarations of methods
-void printBoard(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7);
+void printBoard(int (*pBoard)[num_rows][num_colm]);
 void addMove(int playerInput, int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7);
 int checkFall(int *colm);
 int playerTurn();
-bool checkWin(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7);
 void printMatrix(int matrix[][num_colm], int rows);
+int getDir(int orow, int ocol, int crow, int ccol);
 
 int main() {
 
-    //Board Variable declarations
-    int column1[6] = {0,0,0,0,0,0};
-    int column2[6] = {0,0,0,0,0,0};
-    int column3[6] = {0,0,0,0,0,0};
-    int column4[6] = {0,0,0,0,0,0};
-    int column5[6] = {0,0,0,0,0,0};
-    int column6[6] = {0,0,0,0,0,0};
-    int column7[6] = {0,0,0,0,0,0};
-
-    int *cl1 = column1;
-    int *cl2 = column2;
-    int *cl3 = column3;
-    int *cl4 = column4;
-    int *cl5 = column5;
-    int *cl6 = column6;
-    int *cl7 = column7;
-
-    //TODO: Make into 2D array for easy of use in checkWin function
-
     //Declares board array with all 0s
     int board[num_rows][num_colm];
-
+    int count = 1; //DEBUG
     for(int row = 0; row < num_rows; row++){
         for(int elem = 0; elem < num_colm; elem++){
-            board[row][elem] = 0;
+            board[row][elem] = count;
+            count++; //DEBUG
         }
     }
 
+    //declared the pointer to the Connect4 Board
+    int  (*pBoard)[num_rows][num_colm] = &board;
+    std::cout << *pBoard[2][0] << std::endl;
+
+    printBoard(pBoard);
+    std::cout << std::endl;
     printMatrix(board, num_rows);
 
-    /*bool win =  false;
 
-    while(!win){
-        bool player_turn = true;
 
-        if(player_turn){
-
-            std:: cout << "Player_1's turn..." << std:: endl;
-
-            player_turn =  false;
-        }else if(!player_turn){
-
-            std::cout << "Player_2's turn..." << std::endl;
-
-            player_turn =  true;
-        }
-
-        win = checkWin(cl1, cl2, cl3, cl4, cl5 ,cl6, cl7);
-    }
-*/
-    //printBoard(cl1, cl2, cl3, cl4, cl5, cl6, cl7);
-
-    //std::cout << playerTurn();
 
     return 0;
 }
 
+void printBoard(int (*pBoard)[num_rows][num_colm]){
+    std::cout << "1 " << "2 " << "3 " << "4 " << "5 " << "6 " << "7 " << std::endl;
+    std::cout << "-------------" << std::endl;
+
+    for(int row = 0 ; row < num_rows; row++){
+        for(int col = 0; col < num_colm; col++){
+            std::cout << *pBoard[row][col] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+}
+
+
+//prints the board
 void printMatrix(int matrix[][num_colm], int rows){
-    for(int col = 0; col < num_colm; col++){
-        for(int row = 0; row < rows; row++){
+
+    std::cout << "1 " << "2 " << "3 " << "4 " << "5 " << "6 " << "7 " << std::endl;
+    std::cout << "-------------" << std::endl;
+
+    for(int row = 0; row < rows; row++){
+        for(int col = 0; col < num_colm; col++) {
             std::cout << matrix[row][col] << " ";
         }
         std::cout << std::endl;
     }
 }
 
-
-//prints the Connect4 Board
-void printBoard(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7){
-
-    std::cout << "1 " << "2 " << "3 " << "4 " << "5 " << "6 " << "7 " << std::endl;
-    std::cout << "______________" << std::endl;
-
-    //prints all element of an array
-    for(int i = 0; i < 6; i++) {
-        std::cout << cl1[i] << " " << cl2[i] << " " << cl3[i] << " " << cl4[i] << " " << cl5[i] << " " << cl6[i] << " " << cl7[i] << std::endl;
-    }
-}
-
 //asks and takes an input from the player for their next move
 int playerTurn(){
     int move;
-    std::cout << "\nChoose your next move: \n1|2|3|4|5|6|7  \n";
-    std::cin >> move;
-    std::cout << std::endl;
+    bool loop = true;
+
+    while(loop) {
+        std::cout << "\nChoose your next move: \n1|2|3|4|5|6|7  \n";
+        std::cin >> move;
+        std::cout << std::endl;
+        //Checks if player inputted a valid column
+        if (move < 1 || move > 7) {
+            loop = true;
+            std::cout << "Your move was out of bounds! Please try again." << std::endl;
+        }else{
+            loop = false;
+        }
+    }
     //turns the player input into a number that the array can use
     move--;
     return move;
 }
 
-void addMove(int playerInput, int player, int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7){
-
+/*void addMove(int playerInput, int player, int *board[][num_colm], int rows){
+    //TODO: Remake for 2D array
     if(player != 1 && player != 2){
-        std::cout << "Player number out of bounds." << std::endl;
+        std::cout << "ERROR: Player number out of bounds." << std::endl;
     }else{
         int pos;
         switch(playerInput){
-            case 1:
+            case 0:
                 pos = checkFall(cl1);
                 cl1[pos] = player;
                 break;
-            case 2:
+            case 1:
                 pos = checkFall(cl2);
                 cl2[pos] = player;
                 break;
-            case 3:
+            case 2:
                 pos = checkFall(cl3);
                 cl3[pos] = player;
                 break;
-            case 4:
+            case 3:
                 pos = checkFall(cl4);
                 cl4[pos] = player;
                 break;
-            case 5:
+            case 4:
                 pos = checkFall(cl5);
                 cl5[pos] = player;
                 break;
-            case 6:
+            case 5:
                 pos = checkFall(cl6);
                 cl6[pos] = player;
                 break;
-            case 7:
+            case 6:
                 pos = checkFall(cl7);
                 cl7[pos] = player;
                 break;
@@ -143,10 +127,11 @@ void addMove(int playerInput, int player, int *cl1, int *cl2, int *cl3, int *cl4
                 std::cout << "Player input out of bounds!" << std::endl;
         }
     }
-}
+}*/
 
 //find which position the new move falls to
 int checkFall(int *colm){
+    //TODO: Fix for 2D Array
     int pos;
     bool flag = true;
     int i = 6;
@@ -162,22 +147,54 @@ int checkFall(int *colm){
     return pos;
 }
 
-//check if the win condition is met, FALSE is not WIN, TRUE is WIN
-bool checkWin(int *cl1, int *cl2, int *cl3, int *cl4, int *cl5, int *cl6, int *cl7){
-    bool win = false;
+/*
+bool checkWin(int board[][num_colm], int rows){
 
-    //TODO: Add win condition check
+    //Check every element for adjacent comman 1 or 2 (only is !0)
+    //Get direction of adjacent comman
+    //Check element in the direction either side
 
-    /*
-     *  {0,0,0
-     *   0,A,0  Shape of array relative to the element in question (A)
-     *   0,0,0}
-     */
-    int adjacent[8] = {0,0,0,0,0,0,0,0};
+    int row, col;
 
+    int dir[2];
 
+    int player = board[row][col];
 
+    for(int checkrow = -1; checkrow < 2; checkrow++) {
+        for (int checkcol = -1; checkcol < 2; checkcol++) {
+            if (player == board[checkrow][checkcol]){
+                //dir = getDir(row, col, checkrow, checkcol);
+            }
+        }
+    }
+}*/
 
-    return win;
-}
+/*void getDir(int orow, int ocol, int crow, int ccol, int *dir[]){
+
+    if(crow < orow){
+        if(ccol < ocol){
+            dir = 1;
+            dir[0] = -1;
+            dir[1] = -1;
+        }else if(ccol == ocol){
+            dir = 2;
+        }else if(ccol > ocol){
+            dir = 3;
+        }
+    }else if(crow == orow){
+        if(ccol < ocol){
+            dir = 4;
+        }else if(crow > ocol){
+            dir = 5;
+        }
+    }else if (crow > orow){
+        if(ccol < ocol){
+            dir = 6;
+        }else if(ccol == ocol){
+            dir = 7;
+        }else if(ccol > ocol){
+            dir = 8;
+        }
+    }
+}*/
 
